@@ -1,11 +1,13 @@
 const Thing = require('../models/Things')
 
     exports.creatThing = (req, res, next) => {
-    // Delete _id from frontend
-        delete req.body._id;  
+        const thingObject = JSON.parse(req.body.thing);
+        // Delete _id from frontend
+        delete thingObject._id;  
         const thing = new Thing({
            // L'opérateur spread ... est utilisé pour faire une copie de tous les éléments de req.body
-            ...req.body
+            ...thingObject,
+            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         });
         // save enregistre en db
         thing.save()
